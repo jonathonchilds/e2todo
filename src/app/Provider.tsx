@@ -35,16 +35,20 @@ export const Provider: React.FC<{
     if (existingTodo) {
       return;
     }
-    const response = await fetch("http://localhost:3001/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(todo),
-    });
-    if (response.ok) {
-      const newTodo = await response.json();
-      setTodos((prevTodos) => [...prevTodos, newTodo]);
+    try {
+      const { data: newTodoData, error } = await supabase
+        .from("tasks")
+        .insert([todo])
+        .single();
+      if (error) {
+        console.error(error);
+        return;
+      }
+      if (newTodoData) {
+        setTodos((prevTodos) => [...prevTodos, newTodoData]);
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
