@@ -1,7 +1,7 @@
-import Footer from "../components/PageFooter";
-import TodoList from "../components/TodoList";
-import TodoInputField from "../components/TodoInputField";
-import PageHeader from "../components/PageHeader";
+"use client";
+//standard -> related -> local
+
+import { useContext, useState } from "react";
 
 import {
   DragDropContext,
@@ -10,8 +10,16 @@ import {
   OnDragEndResponder,
 } from "react-beautiful-dnd";
 
+import TodoItem from "@/components/TodoItem";
+import { TodoContext } from "@/components/Providers";
+import { ITodoItem } from "@/types/todoitem";
+import useMediaQuery from "@/hooks/useMediaQuery";
+import Footer from "@/components/PageFooter";
+
+import TodoInputField from "@/components/TodoInputField";
+import PageHeader from "@/components/PageHeader";
+
 //The role of onDragEnd is to synchronously update the state of our app to reflect the drag and drop result.
-const onDragEnd = (result: DropResult) => {};
 
 // The droppable uses the render props pattern and expects its children to be a function that returns a React component.
 // This is so that react-beautiful-dnd does not need to create any dom nodes for us (React-beautiful-dnd latches into the existing structure)
@@ -26,6 +34,46 @@ const onDragEnd = (result: DropResult) => {};
 // LOOK at styled-components
 
 export default function Page() {
+  const onDragEnd = (result: DropResult) => {};
+  const { todos, removeTodo } = useContext(TodoContext);
+  const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
+  const isMobile = useMediaQuery("(max-width: 375px)");
+
+  const filteredTodos = todos.filter((todo) => {
+    if (filter === "active") {
+      return !todo.isCompleted;
+    } else if (filter === "completed") {
+      return todo.isCompleted;
+    }
+    return true;
+  });
+
+  const numberOfTodosRemaining = (todos: ITodoItem[]): string => {
+    const numberOfTodos = todos.filter((todo) => !todo.isCompleted).length;
+    return numberOfTodos === 1
+      ? `${numberOfTodos} item left`
+      : `${numberOfTodos} items left`;
+  };
+
+  const handleShowAllTodos = () => {
+    setFilter("all");
+  };
+
+  const handleShowActiveTodos = () => {
+    setFilter("active");
+  };
+
+  const handleShowCompletedTodos = () => {
+    setFilter("completed");
+  };
+
+  const handleClearCompletedTodos = () => {
+    todos
+      .filter((todo) => todo.isCompleted)
+      .forEach((todo) => removeTodo(todo.id));
+    setFilter("all");
+  };
+
   return (
     <main className="flex flex-col desktop:w-5/12 w-80 mx-auto relative ">
       <PageHeader />
@@ -33,10 +81,100 @@ export default function Page() {
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="todo-item">
           {(provided) => (
-            <TodoList {...provided.droppableProps} ref={provided.innerRef} />
+            <ul ref={provided.innerRef} {...provided.droppableProps}>
+              {filteredTodos.map((todo) => (
+                <TodoItem key={todo.id} todo={todo} />
+              ))}
+              {provided.placeholder}
+            </ul>
           )}
         </Droppable>
       </DragDropContext>
+      {isMobile ? (
+        <div>
+          <section className="mobile_list_footer">
+            <div>{numberOfTodosRemaining(todos)}</div>
+            <button
+              className="tableFooterBtn"
+              onClick={handleClearCompletedTodos}
+            >
+              Clear Completed
+            </button>
+          </section>
+          <section>
+            <div className="mobile_list_detached_footer">
+              <button
+                className={`list_footer_btn ${
+                  filter === "all" ? "list_footer_btn_active" : ""
+                }`}
+                onClick={handleShowAllTodos}
+                aria-pressed={filter === "all" ? "true" : "false"}
+              >
+                All
+              </button>
+              <button
+                className={`list_footer_btn ${
+                  filter === "active" ? "list_footer_btn_active" : ""
+                }`}
+                onClick={handleShowActiveTodos}
+                aria-pressed={filter === "active" ? "true" : "false"}
+              >
+                Active
+              </button>
+              <button
+                className={`list_footer_btn ${
+                  filter === "completed" ? "list_footer_btn_active" : ""
+                }`}
+                onClick={handleShowCompletedTodos}
+                aria-pressed={filter === "completed" ? "true" : "false"}
+              >
+                Completed
+              </button>
+            </div>
+          </section>
+        </div>
+      ) : (
+        <section className="list_footer">
+          <div className="list_footer_counter">
+            {numberOfTodosRemaining(todos)}
+          </div>
+          <div className="flex space-between space-x-6 ">
+            <button
+              className={`list_footer_btn ${
+                filter === "all" ? "list_footer_btn_active" : ""
+              }`}
+              onClick={handleShowAllTodos}
+              aria-pressed={filter === "all" ? "true" : "false"}
+            >
+              All
+            </button>
+            <button
+              className={`list_footer_btn ${
+                filter === "active" ? "list_footer_btn_active" : ""
+              }`}
+              onClick={handleShowActiveTodos}
+              aria-pressed={filter === "active" ? "true" : "false"}
+            >
+              Active
+            </button>
+            <button
+              className={`list_footer_btn ${
+                filter === "completed" ? "list_footer_btn_active" : ""
+              }`}
+              onClick={handleShowCompletedTodos}
+              aria-pressed={filter === "completed" ? "true" : "false"}
+            >
+              Completed
+            </button>
+          </div>
+          <button
+            className="list_footer_btn"
+            onClick={handleClearCompletedTodos}
+          >
+            Clear Completed
+          </button>
+        </section>
+      )}
       <Footer />
     </main>
   );
