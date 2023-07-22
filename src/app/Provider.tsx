@@ -48,15 +48,14 @@ export const Provider: React.FC<{
   };
 
   const removeTodo = async (id: number) => {
-    const response = await fetch(`http://localhost:3001/tasks/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id }),
-    });
-    if (response.ok) {
+    try {
+      const { error } = await supabase.from("tasks").delete().eq("id", id);
+      if (error) {
+        console.error(error);
+      }
       setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+    } catch (error) {
+      console.error(error);
     }
   };
 
