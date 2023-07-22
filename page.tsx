@@ -1,7 +1,11 @@
-import Footer from "../components/PageFooter";
-import TodoList from "../components/TodoList";
-import TodoInputField from "../components/TodoInputField";
-import PageHeader from "../components/PageHeader";
+"use client";
+//standard -> related -> local
+
+import { useContext, useState } from "react";
+import TodoItem from "@/components/TodoItem";
+import { TodoContext } from "@/components/Providers";
+import { ITodoItem } from "@/types/todoitem";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 import {
   DragDropContext,
@@ -9,6 +13,11 @@ import {
   Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
+
+import Footer from "../components/PageFooter";
+import TodoList from "../components/TodoList";
+import TodoInputField from "../components/TodoInputField";
+import PageHeader from "../components/PageHeader";
 
 //The role of onDragEnd is to synchronously update the state of our app to reflect the drag and drop result.
 const onDragEnd = (result: DropResult) => {};
