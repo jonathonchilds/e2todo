@@ -36,7 +36,7 @@ export const Provider: React.FC<{
       return;
     }
     try {
-      const { data: newTodoData, error } = await supabase
+      const { data, error } = await supabase
         .from("tasks")
         .insert([todo])
         .single();
@@ -44,9 +44,7 @@ export const Provider: React.FC<{
         console.error(error);
         return;
       }
-      if (newTodoData) {
-        setTodos((prevTodos) => [...prevTodos, newTodoData]);
-      }
+      setTodos((prevTodos) => [...prevTodos, todo]);
     } catch (error) {
       console.error(error);
     }
@@ -96,7 +94,6 @@ export const Provider: React.FC<{
           console.error(error);
           return;
         }
-
         const filteredTodos = data.map((todo) => {
           if (todo.body === null) {
             return { ...todo, body: "" };
@@ -109,7 +106,6 @@ export const Provider: React.FC<{
           }
           return todo;
         });
-
         setTodos(filteredTodos as TodoItem[]);
       } catch (error) {
         console.error(error);
