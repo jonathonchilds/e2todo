@@ -46,6 +46,7 @@ const TodoItem = ({ todo, index }: { todo: ITodoItem; index: number }) => {
   // now, with the index passed through properly to the draggable component, I can drag and drop the items in the list
   // I had to add the index as a prop, and pass that through the map function in the Page component
   // The most integral thing I was missing before was that the draggableId was set to just a hard-coded string
+  // tested adding, removing, clearing all, and marking todo complete. All working ok.
 
   return (
     <Draggable draggableId={todo.id.toString()} index={index}>

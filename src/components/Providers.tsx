@@ -7,6 +7,7 @@ import { ITodoItem } from "@/types/todoitem";
 
 type TodoContextType = {
   todos: ITodoItem[];
+  setTodos: React.Dispatch<React.SetStateAction<ITodoItem[]>>;
   addTodo: (todo: ITodoItem) => void;
   removeTodo: (id: number) => void;
   updateTodo: (updatedTodo: ITodoItem) => void;
@@ -14,6 +15,7 @@ type TodoContextType = {
 
 export const TodoContext = createContext<TodoContextType>({
   todos: [],
+  setTodos: () => {},
   addTodo: (todo: ITodoItem): void => {},
   removeTodo: (id: number): void => {},
   updateTodo: (updatedTodo: ITodoItem): void => {},
@@ -88,7 +90,9 @@ export const Provider: React.FC<{
   }, []);
 
   return (
-    <TodoContext.Provider value={{ todos, addTodo, removeTodo, updateTodo }}>
+    <TodoContext.Provider
+      value={{ todos, setTodos, addTodo, removeTodo, updateTodo }}
+    >
       <ThemeProvider attribute="class">{children}</ThemeProvider>
     </TodoContext.Provider>
   );

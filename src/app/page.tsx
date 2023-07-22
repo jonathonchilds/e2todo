@@ -33,8 +33,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 // LOOK at styled-components
 
 export default function Page() {
-  const onDragEnd = (result: DropResult) => {};
-  const { todos, removeTodo } = useContext(TodoContext);
+  const { todos, setTodos, removeTodo } = useContext(TodoContext);
   const [filter, setFilter] = useState<"all" | "active" | "completed">("all");
   const isMobile = useMediaQuery("(max-width: 375px)");
 
@@ -73,6 +72,25 @@ export default function Page() {
     setFilter("all");
   };
 
+  // for the onDragEnd function, I wrote a console.log to see what the result object looked like.
+  // This gave me a better idea of what I was working with, and how to use it to update the state of the app
+  // This also helped me to verify that the index was being passed properly for source and destination
+
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+    const items = Array.from(todos);
+    // finds original index and removes it from the newly created array, items[]
+    const [reorderedItem] = items.splice(source.index, 1);
+    items.splice(destination!.index, 0, reorderedItem);
+    setTodos(items);
+  };
+
   return (
     <main className="flex flex-col desktop:w-5/12 w-80 mx-auto relative ">
       <PageHeader />
@@ -84,6 +102,7 @@ export default function Page() {
               {filteredTodos.map((todo, index) => (
                 <TodoItem key={todo.id} todo={todo} index={index} />
               ))}
+
               {provided.placeholder}
             </ul>
           )}
