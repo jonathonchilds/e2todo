@@ -2,8 +2,13 @@
 
 import React, { createContext, useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
+import { NextApiRequest, NextApiResponse } from "next";
+
+import { createClient } from "@supabase/supabase-js";
 
 import { TodoItem, TodoFilter, TodoContextType } from "@/types/todoTypes";
+import { Database } from "@/types/supabase";
+import Todo from "@/components/Todo";
 
 export const TodoContext = createContext<TodoContextType>({
   todos: [],
@@ -20,6 +25,10 @@ export const Provider: React.FC<{
 }> = ({ children }) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [todoFilter, setTodoFilter] = useState<TodoFilter>("all");
+
+  const supabaseUrl = "https://hcgbpphsvcejauzuyrwp.supabase.co";
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
+  const supabase = createClient<Database>(supabaseUrl, supabaseKey!);
 
   const addTodo = async (todo: TodoItem) => {
     const existingTodo = todos.find((t) => t.id === todo.id);
@@ -77,9 +86,30 @@ export const Provider: React.FC<{
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await fetch("http://localhost:3001/tasks");
-      const todo = await response.json();
-      setTodos(todo);
+      try {
+        const { data, error } = await supabase.from("tasks").select("*");
+        if (error) {
+          console.error(error);
+          return;
+        }
+
+        const filteredTodos = data.map((todo) => {
+          if (todo.body === null) {
+            return { ...todo, body: "" };
+          }
+          if (todo.isCompleted === null) {
+            return { ...todo, isCompleted: false };
+          }
+          if (todo.created_at === null) {
+            return { ...todo, created_at: "" };
+          }
+          return todo;
+        });
+
+        setTodos(filteredTodos as TodoItem[]);
+      } catch (error) {
+        console.error(error);
+      }
     };
     fetchTodos();
   }, []);

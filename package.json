@@ -10,6 +10,7 @@
     "json-server": "json-server --watch db.json --port 3001"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.26.0",
     "@types/node": "20.4.3",
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
@@ -27,6 +28,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "@types/react-beautiful-dnd": "^13.1.4"
+    "@types/react-beautiful-dnd": "^13.1.4",
+    "supabase": "^1.77.9"
   }
 }

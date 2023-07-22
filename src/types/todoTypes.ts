@@ -4,6 +4,7 @@ export type TodoItem = {
   id: number;
   body: string;
   isCompleted: boolean;
+  created_at: string;
 };
 
 export type TodoContextType = {

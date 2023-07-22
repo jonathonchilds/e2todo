@@ -21,6 +21,7 @@ const ToDoInput = () => {
       id: Math.floor(Math.random() * 10000),
       body: inputValue,
       isCompleted: false,
+      created_at: new Date().toISOString(),
     };
     addTodo(newTodo);
     setInputValue("");
