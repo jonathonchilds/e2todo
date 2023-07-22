@@ -6,11 +6,14 @@ import PageHeader from "../components/PageHeader";
 import {
   DragDropContext,
   DropResult,
+  Droppable,
   OnDragEndResponder,
 } from "react-beautiful-dnd";
 
 //The role of onDragEnd is to synchronously update the state of our app to reflect the drag and drop result.
 const onDragEnd = (result: DropResult) => {};
+
+// The droppable uses the render props pattern and expects its children to be a function that returns a React component.
 
 export default function Page() {
   return (
@@ -18,7 +21,7 @@ export default function Page() {
       <PageHeader />
       <TodoInputField />
       <DragDropContext onDragEnd={onDragEnd}>
-        <TodoList />
+        <Droppable droppableId={"todo-item"}>{() => <TodoList />}</Droppable>
       </DragDropContext>
       <Footer />
     </main>
