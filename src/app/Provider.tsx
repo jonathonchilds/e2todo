@@ -2,13 +2,11 @@
 
 import React, { createContext, useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
-import { NextApiRequest, NextApiResponse } from "next";
 
 import { createClient } from "@supabase/supabase-js";
 
 import { TodoItem, TodoFilter, TodoContextType } from "@/types/todoTypes";
 import { Database } from "@/types/supabase";
-import Todo from "@/components/Todo";
 
 export const TodoContext = createContext<TodoContextType>({
   todos: [],
