@@ -3,30 +3,25 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
 
-import { ITodoItem } from "@/types/todoitem";
-
-type TodoContextType = {
-  todos: ITodoItem[];
-  setTodos: React.Dispatch<React.SetStateAction<ITodoItem[]>>;
-  addTodo: (todo: ITodoItem) => void;
-  removeTodo: (id: number) => void;
-  updateTodo: (updatedTodo: ITodoItem) => void;
-};
+import { TodoItem, TodoFilter, TodoContextType } from "@/types/todoTypes";
 
 export const TodoContext = createContext<TodoContextType>({
   todos: [],
   setTodos: () => {},
-  addTodo: (todo: ITodoItem): void => {},
+  todoFilter: "all",
+  setTodoFilter: () => {},
+  addTodo: (todo: TodoItem): void => {},
   removeTodo: (id: number): void => {},
-  updateTodo: (updatedTodo: ITodoItem): void => {},
+  updateTodo: (updatedTodo: TodoItem): void => {},
 });
 
 export const Provider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [todos, setTodos] = useState<ITodoItem[]>([]);
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+  const [todoFilter, setTodoFilter] = useState<TodoFilter>("all");
 
-  const addTodo = async (todo: ITodoItem) => {
+  const addTodo = async (todo: TodoItem) => {
     const existingTodo = todos.find((t) => t.id === todo.id);
     if (existingTodo) {
       return;
@@ -57,7 +52,7 @@ export const Provider: React.FC<{
     }
   };
 
-  const updateTodo = async (updatedTodo: ITodoItem) => {
+  const updateTodo = async (updatedTodo: TodoItem) => {
     const id = updatedTodo.id;
     const response = await fetch(`http://localhost:3001/tasks/${id}`, {
       method: "PUT",
@@ -91,7 +86,15 @@ export const Provider: React.FC<{
 
   return (
     <TodoContext.Provider
-      value={{ todos, setTodos, addTodo, removeTodo, updateTodo }}
+      value={{
+        todos,
+        setTodos,
+        addTodo,
+        removeTodo,
+        updateTodo,
+        todoFilter,
+        setTodoFilter,
+      }}
     >
       <ThemeProvider attribute="class">{children}</ThemeProvider>
     </TodoContext.Provider>

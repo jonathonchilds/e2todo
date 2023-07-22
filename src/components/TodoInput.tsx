@@ -3,8 +3,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { ITodoItem } from "../types/todoitem";
-import { TodoContext } from "./Providers";
+import { TodoItem } from "../types/todoTypes";
+import { TodoContext } from "../app/Provider";
 
 const ToDoInput = () => {
   const [inputValue, setInputValue] = useState("");
@@ -17,7 +17,7 @@ const ToDoInput = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!inputValue) return;
-    const newTodo: ITodoItem = {
+    const newTodo: TodoItem = {
       id: Math.floor(Math.random() * 10000),
       body: inputValue,
       isCompleted: false,

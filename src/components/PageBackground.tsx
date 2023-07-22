@@ -8,9 +8,9 @@ import darkDesktopImage from "@/public/bg-desktop-dark.jpg";
 import darkMobileImage from "@/public/bg-mobile-dark.jpg";
 import lightDesktopImage from "@/public/bg-desktop-light.jpg";
 import lightMobileImage from "@/public/bg-mobile-light.jpg";
-import useMediaQuery from "@/hooks/useMediaQuery";
+import useMediaQuery from "@/customHooks/useMediaQuery";
 
-const BackgroundImages = () => {
+const PageBackground = () => {
   const { resolvedTheme } = useTheme();
   const isMobile = useMediaQuery("(max-width: 375px)");
 
@@ -39,4 +39,4 @@ const BackgroundImages = () => {
   );
 };
 
-export default BackgroundImages;
+export default PageBackground;

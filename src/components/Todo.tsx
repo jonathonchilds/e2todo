@@ -9,13 +9,13 @@ import Image from "next/image";
 
 import { Draggable } from "react-beautiful-dnd";
 
-import { TodoContext } from "./Providers";
-import { ITodoItem } from "@/types/todoitem";
-import useMediaQuery from "@/hooks/useMediaQuery";
+import { TodoContext } from "../app/Provider";
+import { TodoItem } from "@/types/todoTypes";
+import useMediaQuery from "@/customHooks/useMediaQuery";
 import check from "@/public/icon-check.svg";
 import cross from "@/public/icon-cross.svg";
 
-const TodoItem = ({ todo, index }: { todo: ITodoItem; index: number }) => {
+const Todo = ({ todo, index }: { todo: TodoItem; index: number }) => {
   const [isHovered, setisHovered] = useState(false);
   const { removeTodo, updateTodo } = React.useContext(TodoContext);
   const isMobile = useMediaQuery("(max-width: 375px)");
@@ -38,14 +38,13 @@ const TodoItem = ({ todo, index }: { todo: ITodoItem; index: number }) => {
   // the first argument of the function is an object that contains a property called provided
   // ****
   // ****
-  // MOVE DRAG HANDLE PROPS TO THE APPROPRIATE LOCATION OF THE COMPONENT (THE LABEL)
-  // So, with the draggable id set to a string, I get the same behavior I had before, where
-  // only the last item in the list will grab and attempt to drag, && the entire list disappears while in a drag state
-  // OK! I had the index set to the todo.id, which was giving me the weird behavior of only the last item in the list
-  // being able to be sorted in-between other elements.
+  // MOVE DRAG HANDLE PROPS TO THE APPROPRIATE LOCATION OF THE COMPONENT (THE LABEL) - Unnecessary, as this doesn't interfere with the buttons! :)
+
+  // OK! I had the index set to the todo.id, which was giving me the weird behavior of only the last item in the list being able to be sorted in-between other elements.
   // now, with the index passed through properly to the draggable component, I can drag and drop the items in the list
-  // I had to add the index as a prop, and pass that through the map function in the Page component
-  // The most integral thing I was missing before was that the draggableId was set to just a hard-coded string
+  // I had to add the index as a prop and pass that through the map function in the Page component
+  // (Furthermore, in my first try at this, I'm pretty sure I set the draggableId = {"hard-coded string"}!! That was causing the awful behavior
+  // of grabbing only the last item in the list, no matter where I clicked, and making the rest of the list disappear.)
   // tested adding, removing, clearing all, and marking todo complete. All working ok.
 
   return (
@@ -116,4 +115,4 @@ const TodoItem = ({ todo, index }: { todo: ITodoItem; index: number }) => {
   );
 };
 
-export default TodoItem;
+export default Todo;

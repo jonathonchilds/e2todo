@@ -1,6 +1,6 @@
 import { Josefin_Sans } from "next/font/google";
-import { Provider } from "@/components/Providers";
-import BackgroundImages from "@/components/BackgroundImages";
+import { Provider } from "@/app/Provider";
+import Background from "@/components/PageBackground";
 import "./globals.css";
 
 // Implements Next.js' new font optimization - improves page load performance and reduces layout shift
@@ -22,7 +22,7 @@ export default function RootLayout({
     <html lang="en" className={josefinSans.className}>
       <body className="dark:bg-dark-vd-blue  bg-light-vl-grayish-blue ">
         <Provider>
-          <BackgroundImages />
+          <Background />
           {children}
         </Provider>
       </body>
