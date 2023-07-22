@@ -1,27 +1,68 @@
 @tailwind base;
+
+li:first-child {
+  @apply rounded-t-lg;
+}
+
+h1 {
+  @apply font-[600] desktop:text-4xl text-2xl tracking-[14px] text-white;
+}
+
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+@layer components {
+  /* TODO INPUT */
+  .todo_form {
+    @apply dark:bg-dark-vd-desaturated-blue bg-light-vl-gray p-5 py-4 desktop:p-6 desktop:py-6 flex space-x-5 rounded-lg mb-5 shadow-2xl desktop:text-[18px] text-xs;
   }
-}
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  .todo_input {
+    @apply outline-none dark:bg-dark-vd-desaturated-blue bg-light-vl-gray caret-bright-blue dark:placeholder:text-dark-d-grayish-blue placeholder:text-light-d-grayish-blue text-light-vd-grayish-blue dark:text-dark-l-grayish-blue;
+  }
+
+  /* TODO LIST ITEMS */
+  .todo_list_item {
+    @apply dark:bg-dark-vd-desaturated-blue bg-light-vl-gray p-5 py-4 desktop:p-6 desktop:py-6 flex space-x-5 border-b dark:border-dark-vd-grayish-blue border-light-l-grayish-blue items-center justify-between desktop:text-[18px] text-xs;
+  }
+
+  .todo_completed {
+    @apply line-through dark:text-dark-vd-grayish-blue text-light-l-grayish-blue dark:decoration-dark-d-grayish-blue decoration-light-d-grayish-blue flex items-center;
+  }
+
+  .gray_circle_btn {
+    @apply border rounded-full dark:border-dark-vd-grayish-blue border-light-l-grayish-blue desktop:w-6 desktop:h-6 w-5 h-5 cursor-pointer;
+  }
+
+  .gradient_circle_btn {
+    @apply from-[#57ddff] to-[#c058f3] bg-gradient-to-br p-[10px] border-none rounded-full desktop:w-6 desktop:h-6 w-5 h-5 cursor-pointer;
+  }
+
+  /* DESKTOP LIST FOOTER */
+
+  .list_footer {
+    @apply flex justify-between p-6 dark:bg-dark-vd-desaturated-blue bg-light-vl-gray rounded-b-lg;
+  }
+
+  .list_footer_counter {
+    @apply text-xs text-dark-d-grayish-blue;
+  }
+
+  .list_footer_btn {
+    @apply dark:hover:text-dark-l-grayish-blue-hover hover:text-light-vd-grayish-blue hover:cursor-pointer desktop:text-xs text-dark-d-grayish-blue;
+  }
+
+  .list_footer_btn_active {
+    @apply text-bright-blue;
+  }
+
+  /* MOBILE LIST FOOTER */
+
+  .mobile_list_footer {
+    @apply flex justify-between p-5 text-xs dark:text-dark-d-grayish-blue text-light-d-grayish-blue  dark:bg-dark-vd-desaturated-blue bg-light-vl-gray rounded-b-lg shadow-lg;
+  }
+
+  .mobile_list_detached_footer {
+    @apply flex justify-center space-x-7 mt-4 p-3 dark:text-dark-d-grayish-blue text-light-d-grayish-blue  dark:bg-dark-vd-desaturated-blue bg-light-vl-gray rounded-lg;
+  }
 }
