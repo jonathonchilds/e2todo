@@ -25,6 +25,10 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 // a styled component has a callback prop named innerRef, which returns the DOM node of the component *
 // * for newer versions of styled-components (above 4.0.0), use the ref prop instead of innerRef! **
 // ** still not working, but I think it's because I'm not using the correct syntax for the ref prop?
+// ** works now that I've combined the page.tsx with the TodoItem.tsx file
+// Drag is working decently well, though only the last item in the list will hover BETWEEN the other items...
+// All of the other items want to be positioned either at the beginning or the end of the list, only.
+// Let's see if the onDragEnd function will help with this issue
 
 // LOOK at styled-components
 
@@ -77,8 +81,8 @@ export default function Page() {
         <Droppable droppableId="todo-item">
           {(provided) => (
             <ul ref={provided.innerRef} {...provided.droppableProps}>
-              {filteredTodos.map((todo) => (
-                <TodoItem key={todo.id} todo={todo} />
+              {filteredTodos.map((todo, index) => (
+                <TodoItem key={todo.id} todo={todo} index={index} />
               ))}
               {provided.placeholder}
             </ul>

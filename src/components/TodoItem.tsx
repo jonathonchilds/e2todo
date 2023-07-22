@@ -15,7 +15,7 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import check from "@/public/icon-check.svg";
 import cross from "@/public/icon-cross.svg";
 
-const TodoItem = ({ todo }: { todo: ITodoItem }) => {
+const TodoItem = ({ todo, index }: { todo: ITodoItem; index: number }) => {
   const [isHovered, setisHovered] = useState(false);
   const { removeTodo, updateTodo } = React.useContext(TodoContext);
   const isMobile = useMediaQuery("(max-width: 375px)");
@@ -39,9 +39,16 @@ const TodoItem = ({ todo }: { todo: ITodoItem }) => {
   // ****
   // ****
   // MOVE DRAG HANDLE PROPS TO THE APPROPRIATE LOCATION OF THE COMPONENT (THE LABEL)
+  // So, with the draggable id set to a string, I get the same behavior I had before, where
+  // only the last item in the list will grab and attempt to drag, && the entire list disappears while in a drag state
+  // OK! I had the index set to the todo.id, which was giving me the weird behavior of only the last item in the list
+  // being able to be sorted in-between other elements.
+  // now, with the index passed through properly to the draggable component, I can drag and drop the items in the list
+  // I had to add the index as a prop, and pass that through the map function in the Page component
+  // The most integral thing I was missing before was that the draggableId was set to just a hard-coded string
 
   return (
-    <Draggable draggableId={todo.id.toString()} index={todo.id}>
+    <Draggable draggableId={todo.id.toString()} index={index}>
       {(provided) => (
         <li
           className="todo_list_item"
