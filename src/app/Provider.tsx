@@ -36,10 +36,7 @@ export const Provider: React.FC<{
       return;
     }
     try {
-      const { data, error } = await supabase
-        .from("tasks")
-        .insert([todo])
-        .single();
+      const { error } = await supabase.from("tasks").insert([todo]).single();
       if (error) {
         console.error(error);
         return;
@@ -64,25 +61,24 @@ export const Provider: React.FC<{
   };
 
   const updateTodo = async (updatedTodo: TodoItem) => {
-    const id = updatedTodo.id;
-    const response = await fetch(`http://localhost:3001/tasks/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedTodo),
-    });
-    if (response.ok) {
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) => {
-          if (todo.id === id) {
-            return updatedTodo;
-          }
-          return todo;
-        })
-      );
-    } else {
-      console.error("Sorry, that todo could not be updated.");
+    try {
+      const { data, error } = await supabase
+        .from("tasks")
+        .update(updatedTodo)
+        .eq("id", updatedTodo.id)
+        .select();
+      if (data) {
+        setTodos((prevTodos) =>
+          prevTodos.map((todo) => {
+            if (todo.id === updatedTodo.id) {
+              return updatedTodo;
+            }
+            return todo;
+          })
+        );
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
