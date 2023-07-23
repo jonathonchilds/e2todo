@@ -3,10 +3,9 @@
 import React, { createContext, useEffect, useState } from "react";
 import { ThemeProvider } from "next-themes";
 
+import supabase from "../../utils/supabase";
 
-import { Database } from "@/types/supabase";
 import { TodoItem, TodoFilter, TodoContextType } from "@/types/todoTypes";
-import { createClient } from "@supabase/supabase-js";
 
 export const TodoContext = createContext<TodoContextType>({
   todos: [],
@@ -23,10 +22,6 @@ export const Provider: React.FC<{
 }> = ({ children }) => {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [todoFilter, setTodoFilter] = useState<TodoFilter>("all");
-
-  const supabaseUrl = "https://hcgbpphsvcejauzuyrwp.supabase.co";
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY;
-  const supabase = createClient<Database>(supabaseUrl, supabaseKey!);
 
   const addTodo = async (todo: TodoItem) => {
     const existingTodo = todos.find((t) => t.id === todo.id);
